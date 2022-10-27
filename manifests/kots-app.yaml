@@ -2,14 +2,14 @@
 apiVersion: kots.io/v1beta1
 kind: Application
 metadata:
-  name: nginx
+  name: korifi
 spec:
-  title: App Name
-  icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/kubernetes/icon/color/kubernetes-icon-color.png
+  title: Korifi
+  icon: https://github.com/cloudfoundry/korifi/raw/main/logo/color/Korifi-logo-icon-only-color.png
   statusInformers:
-    - deployment/nginx
+    - deployment/korifi-api-deployment
   ports:
-    - serviceName: "nginx"
-      servicePort: 80
-      localPort: 8888
-      applicationUrl: "http://nginx"
+    - serviceName: akorifi-api-svc
+      servicePort: 443
+      localPort: 8443
+      applicationUrl: "https://korifi-api-svc"
