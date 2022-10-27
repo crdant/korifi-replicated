@@ -5,36 +5,63 @@ metadata:
   name: config-sample
 spec:
   groups:
-  - name: example_settings
-    title: My Example Config
-    description: Configuration to serve as an example for creating your own. See [https://kots.io/reference/v1beta1/config/](https://kots.io/reference/v1beta1/config/) for configuration docs. In this case, we provide example fields for configuring an Nginx welcome page.
+  - name: admin_user
+    title: Admin Username
+    description: Cloud Foundry admin username
     items:
-    - name: show_text_inputs
-      title: Customize Text Inputs
-      help_text: "Show custom user text inputs"
+    - name: administrator_name
+      title: Administrator Username
+      help_text: | 
+        The name of the Kubernetes user who will have CF admin privileges on 
+        the Korifi installation. For security reasons, you should choose or 
+        create a user that is different from your cluster admin user
+      type: text
+      default: cf-admin
+  - name: global
+    title: Global Settings
+    description: Settings that impact the overall installation of Cloud Foundry
+    items:
+    - name: root_namespace
+      title: Root Namespace
+      helm_text: Root of the Cloud Foundry namespace hierarchy.
+      type: text
+      default: cf
+    - name: generate_ingress_certificates
+      title: Generate Ingress Certificates
+      help_text: |
+        Use cert-manager to generate self-signed certificates for the API and 
+        app endpoints.
       type: bool
-      default: "0"
-      recommended: true
-    - name: example_default_value
-      title: Text Example (with default value)
+      default: true
+    - name: default_app_domain
+      title: Default Application Domain 
+      help_text: Base domain name for application URLs.
       type: text
-      value: ""
-      default: please change this value
-      when: repl{{ ConfigOptionEquals "show_text_inputs" "1" }}
-    - name: api_token
-      title: API token
-      type: password
-      props:
-        rows: 5
-      when: repl{{ ConfigOptionEquals "show_text_inputs" "1" }}
-    - name: readonly_text_left
-      title: Readonly Text
+  - name: api_server
+    title: API Server
+    description: Customize the Cloud Foundry API server
+    items:
+    - name: url
+      title: API Server URL
+      help_text: URL for the Cloud Foundry API server
       type: text
-      value: "{{repl RandomString 10}}"
-      readonly: true
-      when: repl{{ ConfigOptionEquals "show_text_inputs" "1" }}
-    - name: hidden_text
-      title: Secret Key
-      type: password
-      hidden: true
-      value: "{{repl RandomString 40}}"
+    - name: package_repository_prefix
+      title: Package Repository Prefix
+      help_text: |
+        Prefix of the container image repository where app source packages will be stored. 
+        For DockerHub, this should be index.docker.io/<username>. 
+      type: text
+  - name: image_builder
+    title: Image Builder
+    description: Configure the application image builder
+    items:
+    - name: builder_repository
+      title: Builder Repository
+      help_text: Container image repository to store the Cluster Builder image. 
+      type: text
+    - name: droplet_repository
+      title: Dropley Repository Prefix
+      help_text: |
+        Prefix of the container image repository where droplets will be stored. For 
+        DockerHub, this should be index.docker.io/<username>.
+      type: text
